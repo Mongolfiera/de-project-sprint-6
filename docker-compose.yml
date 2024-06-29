@@ -17,7 +17,8 @@ services:
     volumes:
       - mydb:/var/lib/postgresql
       - mylessons:/lessons
-      - ./src/dags:/lessons/dags
+      - ${AIRFLOW_DAGS_DIR:-./src/dags}:/lessons/dags
+      - ${PWD}/data/:/data:rw
 
 volumes:
   mydb:
