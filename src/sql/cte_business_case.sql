@@ -3,8 +3,12 @@ user_group_messages as (
      select
           hk_group_id,
           count(distinct hk_user_id) as cnt_users_in_group_with_messages
-     from STV2024060715__DWH.l_user_group_activity luga
-     where hk_user_id in (select distinct hk_user_id from STV2024060715__DWH.l_user_message)
+     from (
+          select
+               lgd.hk_group_id, lum.hk_user_id, lgd.hk_message_id
+          from STV2024060715__DWH.l_groups_dialogs as lgd
+          left join STV2024060715__DWH.l_user_message lum on lgd.hk_message_id = lum.hk_message_id
+     ) as t1
      group by hk_group_id
 ),
 user_group_log as (

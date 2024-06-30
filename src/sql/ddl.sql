@@ -183,7 +183,7 @@ create table STV2024060715__DWH.l_user_group_activity
     CONSTRAINT fk_l_user_group_activity_user FOREIGN KEY (hk_user_id) references STV2024060715__DWH.h_users (hk_user_id)
 )
 order by load_dt
-SEGMENTED BY hk_l_user_group_activity all nodes
+SEGMENTED BY hk_user_id all nodes
 PARTITION BY load_dt::date
 GROUP BY calendar_hierarchy_day(load_dt::date, 3, 2);
 
@@ -300,3 +300,7 @@ create table STV2024060715__DWH.s_auth_history
     load_src                    varchar(20),
     CONSTRAINT fk_s_auth_history_l_user_group_activity FOREIGN KEY (hk_l_user_group_activity) references STV2024060715__DWH.l_user_group_activity(hk_l_user_group_activity)
 );
+order by load_dt
+SEGMENTED BY hash(user_id_from) all nodes
+PARTITION BY load_dt::date
+GROUP BY calendar_hierarchy_day(load_dt::date, 3, 2);
